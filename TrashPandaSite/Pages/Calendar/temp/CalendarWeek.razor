@@ -1,0 +1,14 @@
+﻿@using Data.Calendar
+
+<CalendarDay dayInfo="@weekInfo.Sunday" />
+<CalendarDay dayInfo="@weekInfo.Monday" />
+<CalendarDay dayInfo="@weekInfo.Tuesday" />
+<CalendarDay dayInfo="@weekInfo.Wednesday" />
+<CalendarDay dayInfo="@weekInfo.Thursday" />
+<CalendarDay dayInfo="@weekInfo.Friday" />
+<CalendarDay dayInfo="@weekInfo.Saturday" />
+
+@code {
+    [Parameter]
+    public WeekInfo weekInfo { get; set; }
+}

@@ -1,0 +1,26 @@
+﻿.calendar-tr {
+    min-height: 100px;
+}
+
+.calendar-th {
+    width: 10%;
+}
+
+.calendarTitleBar {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.calendarPaginationButton {
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}

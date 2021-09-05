@@ -1,0 +1,124 @@
+﻿@using Data.Calendar
+@using TrashPandaSite.Data.Calendar.Events 
+
+<div class="calendarTitleBar">
+    <button class="btn btn-outline-secondary calendarPaginationButton">Prev</button>
+    <h2 class="text-light">@MonthName</h2>
+    <button class="btn btn-outline-secondary calendarPaginationButton">Next</button>
+</div>
+
+<table class="table table-bordered table-dark">
+    <thead>
+        <tr class="calendar-tr">
+            <th class="text-center calendar-th" scope="col">Sun</th>
+            <th class="text-center calendar-th" scope="col">Mon</th>
+            <th class="text-center calendar-th" scope="col">Tue</th>
+            <th class="text-center calendar-th" scope="col">Wed</th>
+            <th class="text-center calendar-th" scope="col">Thu</th>
+            <th class="text-center calendar-th" scope="col">Fri</th>
+            <th class="text-center calendar-th" scope="col">Sat</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var week in Weeks)
+        {
+            <WeekComponent weekInfo="@week" />
+        }
+    </tbody>
+</table>
+
+@code {
+    bool Walk(DateTime first, DateTime second)
+    {
+        return !(first.Day == second.Day &&
+               first.Month == second.Month &&
+               first.Year == second.Year);
+    }
+
+    [Parameter]
+    public List<WeekInfo> Weeks { get; set; }
+
+    [Parameter]
+    public string MonthName { get; set; }
+
+    [Parameter]
+    public DateTime TargetMonth { get; set; }
+
+    public CalendarComponent()
+    {
+        Render();
+    }
+
+    private void Render()
+    {
+        int year = 2021;
+        int month = 9;
+        DateTime monthStart = new(year, month, 1);
+        MonthName = monthStart.ToString("MMMM");
+        DateTime calendarStart = monthStart.AddDays(-(int)monthStart.DayOfWeek);
+        int lastDayOfMonthInt = DateTime.DaysInMonth(year, month);
+        DateTime monthEnd = new(year, month, lastDayOfMonthInt);
+        DateTime calendarEnd = monthEnd.AddDays(6 - (int)monthEnd.DayOfWeek);
+        DateTime stopDate = calendarEnd.AddDays(1);
+
+        List<WeekInfo> weeks = new();
+        WeekInfo currentWeek = new();
+
+        DateTime walk = new(calendarStart.Year, calendarStart.Month, calendarStart.Day);
+        while (Walk(walk, stopDate))
+        {
+            DayInfo dayInfo = new()
+            {
+                Date = walk,
+                IsCurrentMonth = walk.Date.Month == month,
+                CalendarEvents = new()
+            };
+
+            if (walk.Day == 15)
+            {
+                dayInfo.CalendarEvents.Add(new LateEvent()
+                {
+                    Details = "Someone is gonna be late!",
+                    TinyDetails = "Someone - late"
+                });
+                dayInfo.CalendarEvents.Add(new AbsentEvent()
+                {
+                    Details = "Another is gonna miss raid!",
+                    TinyDetails = "Another - absent"
+                });
+                dayInfo.CalendarEvents.Add(new LateEvent()
+                {
+                    Details = "Someone is gonna be late!",
+                    TinyDetails = "Someone - late"
+                });
+                dayInfo.CalendarEvents.Add(new AbsentEvent()
+                {
+                    Details = "Another is gonna miss raid!",
+                    TinyDetails = "Another - absent"
+                });
+                dayInfo.CalendarEvents.Add(new LateEvent()
+                {
+                    Details = "Someone is gonna be late!",
+                    TinyDetails = "Someone - late"
+                });
+                dayInfo.CalendarEvents.Add(new AbsentEvent()
+                {
+                    Details = "Another is gonna miss raid!",
+                    TinyDetails = "Another - absent"
+                });
+            }
+
+            currentWeek.SetDayInfo(walk.DayOfWeek, dayInfo);
+
+            if (walk.DayOfWeek == DayOfWeek.Saturday)
+            {
+                weeks.Add(currentWeek);
+                currentWeek = new();
+            }
+
+            walk = walk.AddDays(1);
+        }
+
+        Weeks = weeks;
+    }
+}

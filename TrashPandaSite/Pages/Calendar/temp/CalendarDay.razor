@@ -1,0 +1,10 @@
+﻿@using Data.Calendar
+
+<td>
+    @dayInfo.Date.Day
+</td>
+
+@code {
+    [Parameter]
+    public DayInfo dayInfo { get; set; }
+}

@@ -1,0 +1,29 @@
+﻿@using Data.Calendar
+
+<td class="dayTd">
+    <div class="dayContainer">
+        <div class="dayNumberContainer">
+            <span class="@GetDayNumberClass()">
+                @dayInfo.Date.Day
+            </span>
+        </div>
+        <div class="dayEventContainer">
+            @foreach (var c in dayInfo.CalendarEvents)
+            {
+                <div>
+                    @c.TinyDetails
+                </div>
+            }
+        </div>
+    </div>
+</td>
+
+@code {
+    [Parameter]
+    public DayInfo dayInfo { get; set; }
+
+    string GetDayNumberClass() =>
+        dayInfo.IsCurrentMonth
+            ? "text-light"
+            : "text-muted";
+}

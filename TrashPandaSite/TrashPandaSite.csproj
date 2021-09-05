@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Pages\Calendar\temp\**" />
+    <Content Remove="Pages\Calendar\temp\**" />
+    <EmbeddedResource Remove="Pages\Calendar\temp\**" />
+    <None Remove="Pages\Calendar\temp\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Pages\Calendar\Calendar.razor" />
+    <Content Remove="Pages\Calendar\CalendarDay.razor" />
+    <Content Remove="Pages\Calendar\CalendarWeek.razor" />
+  </ItemGroup>
+
+</Project>

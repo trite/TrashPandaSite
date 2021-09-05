@@ -1,0 +1,24 @@
+﻿.dayContainer {
+    vertical-align: top;
+    text-align: left;
+    width: 100%;
+/*    display: flex;
+    flex-direction: row;*/
+    align-items: center;
+    justify-content: center;
+}
+
+.dayNumberContainer {
+    vertical-align: top;
+    text-align: left;
+    width: 10%;
+}
+
+.dayEventContainer {
+    vertical-align: top;
+    text-align: right;
+}
+
+.dayTd {
+    vertical-align: top;
+}

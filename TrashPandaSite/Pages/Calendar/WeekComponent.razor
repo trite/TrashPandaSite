@@ -1,0 +1,22 @@
+﻿@using Data.Calendar
+
+<tr>
+    <DayComponent dayInfo="@weekInfo.Sunday" />
+    <DayComponent dayInfo="@weekInfo.Monday" />
+    <DayComponent dayInfo="@weekInfo.Tuesday" />
+    <DayComponent dayInfo="@weekInfo.Wednesday" />
+    <DayComponent dayInfo="@weekInfo.Thursday" />
+    <DayComponent dayInfo="@weekInfo.Friday" />
+    <DayComponent dayInfo="@weekInfo.Saturday" />
+</tr>
+
+
+
+
+
+
+
+@code {
+    [Parameter]
+    public WeekInfo weekInfo { get; set; }
+}

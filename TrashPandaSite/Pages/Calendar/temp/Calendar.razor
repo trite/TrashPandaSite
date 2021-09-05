@@ -1,0 +1,72 @@
+﻿@using Data.Calendar
+
+<table class="table table-dark">
+    <thead>
+        <tr>
+            <th class="text-center" scope="col">Sunday</th>
+            <th class="text-center" scope="col">Monday</th>
+            <th class="text-center" scope="col">Tuesday</th>
+            <th class="text-center" scope="col">Wednesday</th>
+            <th class="text-center" scope="col">Thursday</th>
+            <th class="text-center" scope="col">Friday</th>
+            <th class="text-center" scope="col">Saturday</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>29</td>
+            <td>30</td>
+            <td>31</td>
+            <td>1</td>
+            <td>2</td>
+            <td>3</td>
+            <td>4</td>
+            @*<RaidCalendarWeek weekInfo="" />*@
+        </tr>
+    </tbody>
+</table>
+
+@code {
+    bool SameDay(DateTime first, DateTime second)
+    {
+        return first.Day == second.Day &&
+               first.Month == second.Month &&
+               first.Year == second.Year;
+    }
+
+    public GuildCalendar()
+    {
+
+    }
+
+    public Calendar()
+    {
+        DateTime today = DateTime.Now;
+        DateTime monthStart = new(today.Year, today.Month, 1);
+        DateTime calendarStart = monthStart.AddDays(-(int)monthStart.DayOfWeek);
+        int lastDayOfMonthInt = DateTime.DaysInMonth(today.Year, today.Month);
+        DateTime monthEnd = new(today.Year, today.Month, lastDayOfMonthInt);
+        DateTime calendarEnd = monthEnd.AddDays(6 - (int)monthEnd.DayOfWeek);
+
+        List<CalendarWeek> weeks = new();
+        CalendarWeek currentWeek = new();
+
+        DateTime walk = new(calendarStart.Year, calendarStart.Month, calendarStart.Day);
+        while (!SameDay(walk, calendarEnd))
+        {
+            //walk.DayOfWeek switch
+            //{
+            //    // figure out how we're going to create/assign DayInfo objects into the current WeekInfo
+            //    // and then add the currentWeek to weeks and continue until the loop ends
+            //}
+
+
+
+
+            walk.AddDays(1);
+        }
+
+        // Now build a calendar from this data!
+
+    }
+}
