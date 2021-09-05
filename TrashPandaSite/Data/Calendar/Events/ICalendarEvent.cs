@@ -5,5 +5,7 @@
         string TinyDetails { get; }
 
         string Details { get; }
+
+        string ColorClass { get; }
     }
 }

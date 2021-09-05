@@ -10,7 +10,7 @@
         <div class="dayEventContainer">
             @foreach (var c in dayInfo.CalendarEvents)
             {
-                <div>
+                <div class="@c.ColorClass">
                     @c.TinyDetails
                 </div>
             }

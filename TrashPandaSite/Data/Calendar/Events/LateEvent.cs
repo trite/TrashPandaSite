@@ -10,5 +10,7 @@ namespace TrashPandaSite.Data.Calendar.Events
         public string TinyDetails { get; set; }
 
         public string Details { get; set; }
+
+        public string ColorClass { get; set; } = "text-warning";
     }
 }

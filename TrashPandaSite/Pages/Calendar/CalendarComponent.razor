@@ -2,9 +2,9 @@
 @using TrashPandaSite.Data.Calendar.Events 
 
 <div class="calendarTitleBar">
-    <button class="btn btn-outline-secondary calendarPaginationButton">Prev</button>
+    <button class="btn btn-outline-secondary calendarPaginationButton" @onclick="PreviousMonth">Prev</button>
     <h2 class="text-light">@MonthName</h2>
-    <button class="btn btn-outline-secondary calendarPaginationButton">Next</button>
+    <button class="btn btn-outline-secondary calendarPaginationButton" @onclick="NextMonth">Next</button>
 </div>
 
 <table class="table table-bordered table-dark">
@@ -42,19 +42,34 @@
     public string MonthName { get; set; }
 
     [Parameter]
-    public DateTime TargetMonth { get; set; }
+    public DateTime TargetMonth { get; set; } = DateTime.Now;
 
     public CalendarComponent()
     {
+        int year = 2021;
+        int month = 9;
+        TargetMonth = new(year, month, 1);
+        Render();
+    }
+
+    public void PreviousMonth()
+    {
+        TargetMonth = TargetMonth.AddMonths(-1);
+        Render();
+    }
+
+    public void NextMonth()
+    {
+        TargetMonth = TargetMonth.AddMonths(1);
         Render();
     }
 
     private void Render()
     {
-        int year = 2021;
-        int month = 9;
+        var year = TargetMonth.Year;
+        var month = TargetMonth.Month;
         DateTime monthStart = new(year, month, 1);
-        MonthName = monthStart.ToString("MMMM");
+        MonthName = monthStart.ToString("MMMM yyyy");
         DateTime calendarStart = monthStart.AddDays(-(int)monthStart.DayOfWeek);
         int lastDayOfMonthInt = DateTime.DaysInMonth(year, month);
         DateTime monthEnd = new(year, month, lastDayOfMonthInt);
@@ -76,16 +91,6 @@
 
             if (walk.Day == 15)
             {
-                dayInfo.CalendarEvents.Add(new LateEvent()
-                {
-                    Details = "Someone is gonna be late!",
-                    TinyDetails = "Someone - late"
-                });
-                dayInfo.CalendarEvents.Add(new AbsentEvent()
-                {
-                    Details = "Another is gonna miss raid!",
-                    TinyDetails = "Another - absent"
-                });
                 dayInfo.CalendarEvents.Add(new LateEvent()
                 {
                     Details = "Someone is gonna be late!",

@@ -22,3 +22,11 @@
 .dayTd {
     vertical-align: top;
 }
+
+.lateEvent {
+    background-color: yellow;
+}
+
+.absentEvent {
+    background-color: red;
+}
