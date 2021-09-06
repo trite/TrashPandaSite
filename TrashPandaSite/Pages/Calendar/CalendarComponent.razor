@@ -1,6 +1,6 @@
 ﻿@using Data.Calendar
-@using TrashPandaSite.Data.Calendar.Events
 @using TriteUtilities.Azure.Blob
+@using System.Text.Json
 @inject BlobStorageService blobStorageService
 
 <div class="calendarTitleBar">
@@ -29,6 +29,12 @@
     </tbody>
 </table>
 
+<div>
+    <span class="border-light">
+        @JsonTest
+    </span>
+</div>
+
 @code {
     bool Walk(DateTime first, DateTime second)
     {
@@ -45,6 +51,8 @@
 
     [Parameter]
     public DateTime TargetMonth { get; set; } = DateTime.Now;
+
+    public string JsonTest { get; set; }
 
     public CalendarComponent()
     {
@@ -66,15 +74,34 @@
         Render();
     }
 
-    private List<ICalendarEvent> GetCalendarEvents(int year, int month)
-    {
-        string containerName = $"calendar-{year}";
-        string blobName = $"events_{year}-{month}";
-        var calendarEventsForMonth = BlobStorageService.ReadBlob("TrashPandaConn", "calendar", blobName);
+    //private List<ICalendarEvent> GetCalendarEvents(int year, int month)
+    //{
+    //    string containerName = $"calendar";
+    //    string blobName = $"events_{year}-{month}";
+    //    // Option<string> eventsBlob = BlobStorageService.ReadBlob("TrashPandaConn", "calendar", blobName);
+    //    // eventsBlob.Map(b => )
 
-        throw new NotImplementedException("need to finish this still");
-        // TODO: finish this
+    //    throw new NotImplementedException("need to finish this still");
+    //    // TODO: finish this
+    //}
+
+    private Option<Dictionary<int, List<CalendarEvent>>> GetCalendarEvents(int year, int month)
+    {
+        string containerName = "calendar";
+        string blobName = $"events_{year}-{month}";
+        Option<string> eventsBlob = BlobStorageService.ReadBlob("TrashPandaConn", containerName, blobName);
+        return eventsBlob.Map(b => JsonSerializer.Deserialize<Dictionary<int, List<CalendarEvent>>>(b));
     }
+
+    //private Option<List<CalendarEvent>> GetDayEvents(Dictionary<int, List<CalendarEvent>> events, Option<int> day) =>
+    //    day.Map(d =>
+    //    {
+    //        if (events.ContainsKey(d))
+    //        {
+    //            return events[d];
+    //        }
+    //    }
+    //    );
 
     private void Render()
     {
@@ -92,38 +119,72 @@
         WeekInfo currentWeek = new();
 
         DateTime walk = new(calendarStart.Year, calendarStart.Month, calendarStart.Day);
+        var monthCalendarEvents = GetCalendarEvents(year, month);
+
         while (Walk(walk, stopDate))
         {
             DayInfo dayInfo = new()
             {
                 Date = walk,
                 IsCurrentMonth = walk.Date.Month == month,
-                CalendarEvents = new()
+                CalendarEvents = monthCalendarEvents.Map(dict =>
+                {
+                    //if (dict.ContainsKey(walk.Day))
+                    //{
+                    //    return dict[walk.Day];
+                    //}
+                    //return new List<CalendarEvent>();
+                    var temp = new List<CalendarEvent>();
+                    
+                    if (walk.DayOfWeek == DayOfWeek.Tuesday || walk.DayOfWeek == DayOfWeek.Thursday)
+                    {
+                        temp.Add(new CalendarEvent()
+                        {
+                            Details = "Raid night",
+                            Description = "Raid night",
+                            EventType = CalendarEventType.Raid
+                        });
+                    }
+
+                    if (dict.ContainsKey(walk.Day))
+                    {
+                        foreach (var e in dict[walk.Day])
+                        {
+                            temp.Add(e);
+                        }
+                    }
+
+                    return temp;
+                })
+                .IfNone(() => new List<CalendarEvent>())
             };
 
-            if (walk.Day == 15)
-            {
-                dayInfo.CalendarEvents.Add(new LateEvent()
-                {
-                    Details = "Someone is gonna be late!",
-                    TinyDetails = "Someone - late"
-                });
-                dayInfo.CalendarEvents.Add(new AbsentEvent()
-                {
-                    Details = "Another is gonna miss raid!",
-                    TinyDetails = "Another - absent"
-                });
-                dayInfo.CalendarEvents.Add(new LateEvent()
-                {
-                    Details = "Someone is gonna be late!",
-                    TinyDetails = "Someone - late"
-                });
-                dayInfo.CalendarEvents.Add(new AbsentEvent()
-                {
-                    Details = "Another is gonna miss raid!",
-                    TinyDetails = "Another - absent"
-                });
-            }
+
+
+            //DayInfo dayInfo = new()
+            //{
+            //    Date = walk,
+            //    IsCurrentMonth = walk.Date.Month == month,
+            //    CalendarEvents = new()
+            //};
+
+            //if (walk.Day == 15)
+            //{
+            //    dayInfo.CalendarEvents.Add(new CalendarEvent()
+            //    {
+            //        Description = "Hunter#3 - late",
+            //        Details = "Hunter#3 is late because reasons and stuff",
+            //        EventType = CalendarEventType.AttendanceLate,
+            //        Person = "Hunter#3"
+            //    });
+            //    dayInfo.CalendarEvents.Add(new CalendarEvent()
+            //    {
+            //        Description = "Druid#2 - absent",
+            //        Details = "Druid#2 is missing the raid because reasons and stuff",
+            //        EventType = CalendarEventType.AttendanceAbsent,
+            //        Person = "Druid#2"
+            //    });
+            //}
 
             currentWeek.SetDayInfo(walk.DayOfWeek, dayInfo);
 
@@ -137,5 +198,50 @@
         }
 
         Weeks = weeks;
+
+        // TODO: remove later, hanging onto this for reference temporarily
+        //Dictionary<int, List<CalendarEvent>> monthEventsTest = new();
+        //monthEventsTest.Add(15, new());
+
+        //monthEventsTest[15].Add(new()
+        //{
+        //    Description = "Hunter#3 - late",
+        //    Details = "Hunter#3 is late because reasons and stuff",
+        //    EventType = CalendarEventType.AttendanceLate,
+        //    Person = "Hunter#3"
+        //});
+
+        //monthEventsTest[15].Add(new()
+        //{
+        //    Description = "Druid#2 - absent",
+        //    Details = "Druid#2 is missing the raid because reasons and stuff",
+        //    EventType = CalendarEventType.AttendanceAbsent,
+        //    Person = "Druid#2"
+        //});
+
+        //monthEventsTest[15].Add(new()
+        //{
+        //    Description = "Raid night",
+        //    Details = "Raid night",
+        //    EventType = CalendarEventType.Raid,
+        //    Person = ""
+        //});
+
+        //monthEventsTest.Add(8, new());
+
+        //monthEventsTest[8].Add(new()
+        //{
+        //    Description = "Raid night",
+        //    Details = "Raid night",
+        //    EventType = CalendarEventType.Raid,
+        //    Person = ""
+        //});
+
+        //JsonTest = JsonSerializer.Serialize(monthEventsTest);
+
+        //string blobName = $"events_{year}-{month}";
+        //BlobStorageService.WriteBlob("TrashPandaConn", "calendar", blobName, JsonTest);
+        //    // .ReadBlob("TrashPandaConn", containerName, blobName);
+        //var test = JsonSerializer.Deserialize<Dictionary<int, List<CalendarEvent>>>(JsonTest);
     }
 }

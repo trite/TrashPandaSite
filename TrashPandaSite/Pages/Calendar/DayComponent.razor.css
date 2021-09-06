@@ -6,12 +6,13 @@
     flex-direction: row;*/
     align-items: center;
     justify-content: center;
+    /*aspect-ratio: 1 / 1;*/
 }
 
 .dayNumberContainer {
     vertical-align: top;
     text-align: left;
-    width: 10%;
+    /*width: 10%;*/
 }
 
 .dayEventContainer {
@@ -24,9 +25,9 @@
 }
 
 .lateEvent {
-    background-color: yellow;
+    color: yellow;
 }
 
 .absentEvent {
-    background-color: red;
+    color: red;
 }

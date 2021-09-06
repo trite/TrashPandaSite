@@ -5,9 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Calendar\Events\**" />
     <Compile Remove="Pages\Calendar\temp\**" />
+    <Content Remove="Data\Calendar\Events\**" />
     <Content Remove="Pages\Calendar\temp\**" />
+    <EmbeddedResource Remove="Data\Calendar\Events\**" />
     <EmbeddedResource Remove="Pages\Calendar\temp\**" />
+    <None Remove="Data\Calendar\Events\**" />
     <None Remove="Pages\Calendar\temp\**" />
   </ItemGroup>
 
@@ -21,6 +25,10 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\css\bootstrap\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>

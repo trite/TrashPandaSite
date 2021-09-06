@@ -10,8 +10,8 @@
         <div class="dayEventContainer">
             @foreach (var c in dayInfo.CalendarEvents)
             {
-                <div class="@c.ColorClass">
-                    @c.TinyDetails
+                <div class="@GetCalendarEventClass(c)">
+                    @c.Description
                 </div>
             }
         </div>
@@ -21,6 +21,18 @@
 @code {
     [Parameter]
     public DayInfo dayInfo { get; set; }
+
+    string GetCalendarEventClass(CalendarEvent evt)
+    {
+        return evt.EventType switch
+        {
+            CalendarEventType.AttendanceAbsent => "text-danger", // "absentEvent",
+            CalendarEventType.AttendanceLate => "text-warning", // "lateEvent",
+            CalendarEventType.Raid => "text-info",
+            CalendarEventType.Other => "text-light",
+            _ => throw new Exception("Shouldn't be possible unless someone forgot to adjust this for new enum types in CalendarEventType...")
+        };
+    }
 
     string GetDayNumberClass() =>
         dayInfo.IsCurrentMonth
