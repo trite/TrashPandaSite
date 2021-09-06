@@ -1,5 +1,7 @@
 ﻿@using Data.Calendar
-@using TrashPandaSite.Data.Calendar.Events 
+@using TrashPandaSite.Data.Calendar.Events
+@using TriteUtilities.Azure.Blob
+@inject BlobStorageService blobStorageService
 
 <div class="calendarTitleBar">
     <button class="btn btn-outline-secondary calendarPaginationButton" @onclick="PreviousMonth">Prev</button>
@@ -62,6 +64,16 @@
     {
         TargetMonth = TargetMonth.AddMonths(1);
         Render();
+    }
+
+    private List<ICalendarEvent> GetCalendarEvents(int year, int month)
+    {
+        string containerName = $"calendar-{year}";
+        string blobName = $"events_{year}-{month}";
+        var calendarEventsForMonth = BlobStorageService.ReadBlob("TrashPandaConn", "calendar", blobName);
+
+        throw new NotImplementedException("need to finish this still");
+        // TODO: finish this
     }
 
     private void Render()

@@ -23,4 +23,8 @@
     <Folder Include="wwwroot\css\bootstrap\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\TriteUtilities\TriteUtilities\TriteUtilities.csproj" />
+  </ItemGroup>
+
 </Project>

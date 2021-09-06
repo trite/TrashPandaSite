@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TrashPandaSite.Data;
+using TriteUtilities.Azure.Blob;
 
 namespace TrashPandaSite
 {
@@ -29,6 +30,8 @@ namespace TrashPandaSite
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
+
+            services.RegisterStorageService(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
