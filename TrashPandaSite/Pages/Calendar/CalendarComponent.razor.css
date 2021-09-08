@@ -8,19 +8,47 @@
 
 .calendarTitleBar {
     width: 100%;
-    display: flex;
+/*    display: flex;
     flex-direction: row;
     align-items: stretch;
     justify-content: space-between;
+*/  
+
+
+    display: grid;
+    grid-template-columns: 1fr 5fr 1fr;
+    
     margin-left: 20px;
     margin-right: 20px;
     margin-top: 10px;
     margin-bottom: 10px;
 }
 
+.monthName {
+    font-size: 36px;
+    grid-column: span 5;
+    text-align: center;
+    color: lightgray;
+}
+
 .calendarPaginationButton {
-    margin-left: 20px;
-    margin-right: 20px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    padding: 5px;
+    margin: 5px;
+    border: 1px solid white;
+    border-radius: 5px;
+    background-color: #293030;
+    color: white;
+}
+
+.calendarContainer {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+/*    border-style: solid;
+    border-width: 1px;
+    border-color: white;*/
+}
+
+.calendarDayHeader {
+    color: white;
+    text-align: center;
 }

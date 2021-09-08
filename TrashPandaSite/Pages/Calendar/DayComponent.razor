@@ -1,41 +1,105 @@
 ﻿@using Data.Calendar
 
-<td class="dayTd">
-    <div class="dayContainer">
-        <div class="dayNumberContainer">
-            <span class="@GetDayNumberClass()">
-                @dayInfo.Date.Day
-            </span>
+@*<td class="dayTd">
+        <div class="dayContainer">
+            <div class="dayNumberContainer">
+                <span class="@GetDayNumberClass()">
+                    @dayInfo.Date.Day
+                </span>
+            </div>
+            <div class="dayEventContainer">
+                @foreach (var c in dayInfo.CalendarEvents)
+                {
+                    <div class="@GetCalendarEventClass(c)">
+                        @c.Description
+                    </div>
+                }
+            </div>
         </div>
-        <div class="dayEventContainer">
-            @foreach (var c in dayInfo.CalendarEvents)
+    </td>*@
+
+@*<div class="dayContainer">
+    <div class="dayInfoContainer">
+        <div class="daySpecial">
+            @if (IsRaidDay())
             {
-                <div class="@GetCalendarEventClass(c)">
-                    @c.Description
-                </div>
+                <span class="detail">RAID</span>
             }
         </div>
+        <div class="dayNumber">
+            @dayInfo.Date.Day
+        </div>
     </div>
-</td>
+    <div class="dayEvents">
+        @foreach (var c in dayInfo.CalendarEvents)
+        {
+            <div class="@GetCalendarEventClass(c)">
+                @c.Description
+            </div>
+        }
+    </div>
+</div>*@
+
+<div class="newDayContainer">
+    <div class="newDaySpecial">
+        @if (IsRaidDay())
+        {
+            <span class="detail">RAID</span>
+        }
+    </div>
+    <div class="@GetDayNumberClass()">
+        @dayInfo.Date.Day
+    </div>
+    <div class="newDayEvents">
+        @foreach (var c in dayInfo.CalendarEvents)
+        {
+            if (c.EventType != CalendarEventType.Raid)
+            {
+            <div class="@GetCalendarEventClass(c)">
+                @c.Description
+            </div>
+            }
+        }
+    </div>
+</div>
+
 
 @code {
     [Parameter]
     public DayInfo dayInfo { get; set; }
 
+    public bool IsRaidDay()
+    {
+        var raidEvents = dayInfo.CalendarEvents.Where(ce => ce.EventType == CalendarEventType.Raid);
+        return raidEvents.Count() > 0;
+    }
+
     string GetCalendarEventClass(CalendarEvent evt)
     {
         return evt.EventType switch
         {
-            CalendarEventType.AttendanceAbsent => "text-danger", // "absentEvent",
-            CalendarEventType.AttendanceLate => "text-warning", // "lateEvent",
-            CalendarEventType.Raid => "text-info",
-            CalendarEventType.Other => "text-light",
+            CalendarEventType.AttendanceAbsent => "absentEvent", // "absentEvent",
+            CalendarEventType.AttendanceLate => "lateEvent", // "lateEvent",
+            CalendarEventType.Raid => "raidEvent",
+            CalendarEventType.Other => "generalEvent",
             _ => throw new Exception("Shouldn't be possible unless someone forgot to adjust this for new enum types in CalendarEventType...")
         };
     }
 
+    //string GetCalendarEventClass(CalendarEvent evt)
+    //{
+    //    return evt.EventType switch
+    //    {
+    //        CalendarEventType.AttendanceAbsent => "text-danger", // "absentEvent",
+    //        CalendarEventType.AttendanceLate => "text-warning", // "lateEvent",
+    //        CalendarEventType.Raid => "text-info",
+    //        CalendarEventType.Other => "text-light",
+    //        _ => throw new Exception("Shouldn't be possible unless someone forgot to adjust this for new enum types in CalendarEventType...")
+    //    };
+    //}
+
     string GetDayNumberClass() =>
         dayInfo.IsCurrentMonth
-            ? "text-light"
-            : "text-muted";
+            ? "newDayNumber"
+            : "newDayNumber otherMonth";
 }

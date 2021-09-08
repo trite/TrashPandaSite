@@ -19,12 +19,6 @@
     <Content Remove="Pages\Calendar\Calendar.razor" />
     <Content Remove="Pages\Calendar\CalendarDay.razor" />
     <Content Remove="Pages\Calendar\CalendarWeek.razor" />
-    <Content Remove="wwwroot\css\bootstrap\bootstrap.min.css.bak" />
-    <Content Remove="wwwroot\css\bootstrap\bootstrap.min.css.map.bak" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\css\bootstrap\" />
   </ItemGroup>
 
   <ItemGroup>

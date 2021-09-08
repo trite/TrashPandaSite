@@ -3,13 +3,32 @@
 @using System.Text.Json
 @inject BlobStorageService blobStorageService
 
-<div class="calendarTitleBar">
-    <button class="btn btn-outline-secondary calendarPaginationButton" @onclick="PreviousMonth">Prev</button>
+@*<div class="calendarTitleBar">
+    <button class="calendarPaginationButton" @onclick="PreviousMonth">Prev</button>
     <h2 class="text-light">@MonthName</h2>
-    <button class="btn btn-outline-secondary calendarPaginationButton" @onclick="NextMonth">Next</button>
+    <button class="calendarPaginationButton" @onclick="NextMonth">Next</button>
+</div>*@
+
+<div class="calendarContainer">
+    <button class="calendarPaginationButton" @onclick="PreviousMonth">Prev</button>
+    <div class="monthName">@MonthName</div>
+    <button class="calendarPaginationButton" @onclick="NextMonth">Next</button>
+
+    <div class="calendarDayHeader">Sun</div>
+    <div class="calendarDayHeader">Mon</div>
+    <div class="calendarDayHeader">Tue</div>
+    <div class="calendarDayHeader">Wed</div>
+    <div class="calendarDayHeader">Thu</div>
+    <div class="calendarDayHeader">Fri</div>
+    <div class="calendarDayHeader">Sat</div>
+
+    @foreach (var week in Weeks)
+    {
+        <WeekComponent weekInfo="@week" />
+    }
 </div>
 
-<table class="table table-bordered table-dark">
+@*<table class="table table-bordered table-dark">
     <thead>
         <tr class="calendar-tr">
             <th class="text-center calendar-th" scope="col">Sun</th>
@@ -27,13 +46,7 @@
             <WeekComponent weekInfo="@week" />
         }
     </tbody>
-</table>
-
-<div>
-    <span class="border-light">
-        @JsonTest
-    </span>
-</div>
+</table>*@
 
 @code {
     bool Walk(DateTime first, DateTime second)
